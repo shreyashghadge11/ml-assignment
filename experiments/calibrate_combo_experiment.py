@@ -88,7 +88,7 @@ def _run_experiment(y_h=None, model_probs=None, y_true=None, **kwargs):
         writer.writerows(cal_data)
 
 
-def run_experiment_cifar10(out_fpath=None, experiment_args=None, seed=0):
+def run_experiment_cifar10_combo(out_fpath=None, experiment_args=None, seed=0,flag=0):
     model_names = ['r_low_acc', 'resnet-110', 'preresnet-110', 'densenet-bc-L190-k40']
     for model_name in tqdm(model_names, desc='Models', leave=True):
         # Specify output files
@@ -101,8 +101,11 @@ def run_experiment_cifar10(out_fpath=None, experiment_args=None, seed=0):
 
         # Load data
         human_counts, model_probs, y_true = load_CIFAR10H(model_name)
-        y_h = simulate_single_human(human_counts, seed=seed)
-
+        if flag==0:
+          y_h = simulate_single_human(human_counts, seed=seed)
+        else:
+          y_h = simulate_single_human2(human_counts, seed=seed)
+          
         _run_experiment(y_h=y_h, model_probs=model_probs, y_true=y_true, **experiment_args)
 
 
